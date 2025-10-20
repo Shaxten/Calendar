@@ -1,0 +1,45 @@
+import { useState } from 'react';
+import { useAuth } from '../contexts/AuthContext';
+
+function Profile() {
+  const { profile, updateDisplayName } = useAuth();
+  const [editing, setEditing] = useState(false);
+  const [newName, setNewName] = useState(profile?.display_name || '');
+
+  async function handleUpdate() {
+    await updateDisplayName(newName);
+    setEditing(false);
+  }
+
+  return (
+    <div className="container">
+      <h1>Profile</h1>
+      <div style={{ marginTop: '2rem' }}>
+        <p><strong>Display Name:</strong></p>
+        {editing ? (
+          <div style={{ marginTop: '1rem' }}>
+            <input
+              type="text"
+              value={newName}
+              onChange={(e) => setNewName(e.target.value)}
+              style={{ padding: '0.5rem', marginRight: '1rem' }}
+            />
+            <button onClick={handleUpdate}>Save</button>
+            <button onClick={() => setEditing(false)} style={{ marginLeft: '0.5rem', background: '#666' }}>
+              Cancel
+            </button>
+          </div>
+        ) : (
+          <div style={{ marginTop: '1rem' }}>
+            <span style={{ fontSize: '1.2rem' }}>{profile?.display_name}</span>
+            <button onClick={() => setEditing(true)} style={{ marginLeft: '1rem' }}>
+              Edit
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+export default Profile;
