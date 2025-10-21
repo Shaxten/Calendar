@@ -126,10 +126,6 @@ function FoodTracker() {
     loadEntries();
   }
 
-  const filteredEntries = viewMode === 'single' 
-    ? entries 
-    : entries;
-
   const totals = (viewMode === 'single' ? entries : entries.filter(e => e.date === selectedDate)).reduce(
     (acc, entry) => ({
       calories: acc.calories + entry.calories,
