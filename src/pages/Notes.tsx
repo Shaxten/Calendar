@@ -19,7 +19,7 @@ function Notes() {
   const [offset, setOffset] = useState({ x: 0, y: 0 });
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [savedNotes, setSavedNotes] = useState<{ [key: string]: boolean }>({});
-  const saveTimeoutRef = useRef<{ [key: string]: NodeJS.Timeout }>({});
+  const saveTimeoutRef = useRef<{ [key: string]: number }>({});
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 768);
