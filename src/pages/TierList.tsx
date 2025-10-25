@@ -13,9 +13,10 @@ interface FoodItem {
   category_id: string;
   food_name: string;
   restaurant_name: string;
-  taste_rating: number | null;
-  look_rating: number | null;
   category_name?: string;
+  avg_taste?: number;
+  avg_look?: number;
+  vote_count?: number;
 }
 
 function TierList() {
@@ -40,16 +41,33 @@ function TierList() {
   }
 
   async function loadFoodItems() {
-    const { data } = await supabase
+    const { data: items } = await supabase
       .from('tier_food_items')
-      .select('*, tier_categories(name)')
-      .order('taste_rating', { ascending: false });
-    if (data) {
-      const items = data.map(item => ({
-        ...item,
-        category_name: (item.tier_categories as any)?.name
-      }));
-      setFoodItems(items);
+      .select('*, tier_categories(name)');
+    
+    const { data: votes } = await supabase
+      .from('user_votes')
+      .select('*');
+    
+    if (items && votes) {
+      const itemsWithAvg = items.map(item => {
+        const itemVotes = votes.filter(v => v.food_item_id === item.id);
+        const avg_taste = itemVotes.length > 0 
+          ? itemVotes.reduce((sum, v) => sum + v.taste_rating, 0) / itemVotes.length 
+          : null;
+        const avg_look = itemVotes.length > 0 
+          ? itemVotes.reduce((sum, v) => sum + v.look_rating, 0) / itemVotes.length 
+          : null;
+        
+        return {
+          ...item,
+          category_name: (item.tier_categories as any)?.name,
+          avg_taste,
+          avg_look,
+          vote_count: itemVotes.length
+        };
+      });
+      setFoodItems(itemsWithAvg);
     }
   }
 
@@ -81,14 +99,14 @@ function TierList() {
   const bestByRestaurant = restaurants.map(restaurant => {
     const restaurantItems = foodItems.filter(item => 
       item.restaurant_name === restaurant && 
-      item.taste_rating !== null && 
-      item.look_rating !== null
+      item.avg_taste !== null && 
+      item.avg_look !== null
     );
     if (restaurantItems.length === 0) return null;
     
     const best = restaurantItems.reduce((prev, current) => {
-      const prevAvg = (prev.taste_rating! + prev.look_rating!) / 2;
-      const currentAvg = (current.taste_rating! + current.look_rating!) / 2;
+      const prevAvg = (prev.avg_taste! + prev.avg_look!) / 2;
+      const currentAvg = (current.avg_taste! + current.avg_look!) / 2;
       return currentAvg > prevAvg ? current : prev;
     });
     
@@ -125,7 +143,7 @@ function TierList() {
           <h3 style={{ marginTop: 0, color: '#000' }}>🏆 Best Rated by Restaurant</h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             {bestByRestaurant.map(({ restaurant, item }: any) => {
-              const avg = (item.taste_rating + item.look_rating) / 2;
+              const avg = (item.avg_taste + item.avg_look) / 2;
               const { tier, color } = getTier(avg);
               return (
                 <div key={restaurant} style={{ display: 'flex', alignItems: 'center', gap: '15px', padding: '10px', background: '#fff', borderRadius: '4px', border: '1px solid #ddd' }}>
@@ -138,7 +156,7 @@ function TierList() {
                       {restaurant} - {item.category_name}
                     </div>
                     <div style={{ fontSize: '13px', color: '#999' }}>
-                      Taste: {item.taste_rating}/10 | Look: {item.look_rating}/10 | Avg: {avg.toFixed(1)}
+                      Taste: {item.avg_taste.toFixed(1)}/10 | Look: {item.avg_look.toFixed(1)}/10 | Avg: {avg.toFixed(1)} ({item.vote_count} votes)
                     </div>
                   </div>
                 </div>
@@ -157,8 +175,8 @@ function TierList() {
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
               {items.map(item => {
-                const avg = item.taste_rating !== null && item.look_rating !== null 
-                  ? (item.taste_rating + item.look_rating) / 2 
+                const avg = item.avg_taste !== null && item.avg_look !== null 
+                  ? (item.avg_taste + item.avg_look) / 2 
                   : null;
                 const { tier, color } = getTier(avg);
                 return (
@@ -173,7 +191,7 @@ function TierList() {
                       </div>
                       <div style={{ fontSize: '13px', color: '#999' }}>
                         {avg !== null 
-                          ? `Taste: ${item.taste_rating}/10 | Look: ${item.look_rating}/10 | Avg: ${avg.toFixed(1)}`
+                          ? `Taste: ${item.avg_taste!.toFixed(1)}/10 | Look: ${item.avg_look!.toFixed(1)}/10 | Avg: ${avg.toFixed(1)} (${item.vote_count} votes)`
                           : 'Not rated yet'}
                       </div>
                     </div>

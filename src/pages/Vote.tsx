@@ -8,35 +8,52 @@ interface FoodItem {
   category_id: string;
   food_name: string;
   restaurant_name: string;
-  taste_rating: number | null;
-  look_rating: number | null;
   category_name?: string;
+}
+
+interface UserVote {
+  food_item_id: string;
+  taste_rating: number;
+  look_rating: number;
 }
 
 function Vote() {
   const { user } = useAuth();
   const [foodItems, setFoodItems] = useState<FoodItem[]>([]);
+  const [userVotes, setUserVotes] = useState<UserVote[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [ratings, setRatings] = useState({ taste: 0, look: 0 });
+  const [ratings, setRatings] = useState({ taste: 5, look: 5 });
 
   useEffect(() => {
     if (user) loadFoodItems();
   }, [user]);
 
   async function loadFoodItems() {
-    const { data } = await supabase
+    const { data: items } = await supabase
       .from('tier_food_items')
       .select('*, tier_categories(name)');
-    if (data) {
-      const items = data.map(item => ({
+    
+    const { data: votes } = await supabase
+      .from('user_votes')
+      .select('*')
+      .eq('user_id', user?.id);
+    
+    if (items) {
+      const foodList = items.map(item => ({
         ...item,
         category_name: (item.tier_categories as any)?.name
       }));
-      setFoodItems(items);
-      if (items.length > 0) {
+      setFoodItems(foodList);
+      
+      if (votes) {
+        setUserVotes(votes);
+      }
+      
+      if (foodList.length > 0) {
+        const currentVote = votes?.find(v => v.food_item_id === foodList[0].id);
         setRatings({ 
-          taste: items[0].taste_rating ?? 5, 
-          look: items[0].look_rating ?? 5 
+          taste: currentVote?.taste_rating ?? 5, 
+          look: currentVote?.look_rating ?? 5 
         });
       }
     }
@@ -45,20 +62,36 @@ function Vote() {
   async function saveRating() {
     if (foodItems.length === 0) return;
     const current = foodItems[currentIndex];
-    await supabase
-      .from('tier_food_items')
-      .update({
-        taste_rating: ratings.taste,
-        look_rating: ratings.look
-      })
-      .eq('id', current.id);
+    
+    const existingVote = userVotes.find(v => v.food_item_id === current.id);
+    
+    if (existingVote) {
+      await supabase
+        .from('user_votes')
+        .update({
+          taste_rating: ratings.taste,
+          look_rating: ratings.look
+        })
+        .eq('user_id', user?.id)
+        .eq('food_item_id', current.id);
+    } else {
+      await supabase
+        .from('user_votes')
+        .insert({
+          user_id: user?.id,
+          food_item_id: current.id,
+          taste_rating: ratings.taste,
+          look_rating: ratings.look
+        });
+    }
 
     if (currentIndex < foodItems.length - 1) {
       const nextIndex = currentIndex + 1;
       setCurrentIndex(nextIndex);
+      const nextVote = userVotes.find(v => v.food_item_id === foodItems[nextIndex].id);
       setRatings({ 
-        taste: foodItems[nextIndex].taste_rating ?? 5, 
-        look: foodItems[nextIndex].look_rating ?? 5 
+        taste: nextVote?.taste_rating ?? 5, 
+        look: nextVote?.look_rating ?? 5 
       });
     } else {
       alert('All foods rated!');
@@ -71,9 +104,10 @@ function Vote() {
     if (currentIndex < foodItems.length - 1) {
       const nextIndex = currentIndex + 1;
       setCurrentIndex(nextIndex);
+      const nextVote = userVotes.find(v => v.food_item_id === foodItems[nextIndex].id);
       setRatings({ 
-        taste: foodItems[nextIndex].taste_rating ?? 5, 
-        look: foodItems[nextIndex].look_rating ?? 5 
+        taste: nextVote?.taste_rating ?? 5, 
+        look: nextVote?.look_rating ?? 5 
       });
     }
   }
@@ -91,6 +125,8 @@ function Vote() {
   }
 
   const current = foodItems[currentIndex];
+  const currentVote = userVotes.find(v => v.food_item_id === current.id);
+  const hasVoted = !!currentVote;
 
   return (
     <div style={{ padding: '20px', maxWidth: '600px', margin: '0 auto' }}>
@@ -110,7 +146,12 @@ function Vote() {
           {current.category_name}
         </div>
         <h2 style={{ color: '#000', marginBottom: '10px' }}>{current.food_name}</h2>
-        <p style={{ color: '#666', marginBottom: '30px', fontSize: '16px' }}>{current.restaurant_name}</p>
+        <p style={{ color: '#666', marginBottom: '10px', fontSize: '16px' }}>{current.restaurant_name}</p>
+        {hasVoted && (
+          <p style={{ color: '#28a745', marginBottom: '20px', fontSize: '14px', fontWeight: 'bold' }}>
+            ✓ You've already voted on this item
+          </p>
+        )}
 
         <div style={{ marginBottom: '30px' }}>
           <label style={{ display: 'block', marginBottom: '10px', fontSize: '18px', fontWeight: 'bold', color: '#000' }}>
@@ -143,7 +184,7 @@ function Vote() {
             onChange={(e) => setRatings({ ...ratings, look: parseInt(e.target.value) })}
             style={{ width: '100%', height: '30px' }}
           />
-          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', color: '#666', marginTop: '5px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', color: '# 666', marginTop: '5px' }}>
             <span>0</span>
             <span>5</span>
             <span>10</span>
