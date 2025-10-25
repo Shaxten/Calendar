@@ -4,18 +4,16 @@ import type { User } from '@supabase/supabase-js';
 
 interface Profile {
   id: string;
-  display_name: string;
-  username?: string;
-  email?: string;
+  username: string;
 }
 
 interface AuthContextType {
   user: User | null;
   profile: Profile | null;
-  signUp: (email: string, password: string, displayName: string, username?: string) => Promise<void>;
-  signIn: (identifier: string, password: string) => Promise<void>;
+  signUp: (username: string, password: string) => Promise<void>;
+  signIn: (username: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
-  updateDisplayName: (name: string) => Promise<void>;
+  updateUsername: (name: string) => Promise<void>;
   refreshProfile: () => Promise<void>;
 }
 
@@ -50,37 +48,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (data) setProfile(data);
   }
 
-  async function signUp(email: string, password: string, displayName: string, username?: string) {
+  async function signUp(username: string, password: string) {
+    const email = `${username}@app.local`;
     const { data, error } = await supabase.auth.signUp({ email, password });
     if (error) throw error;
     if (data.user) {
       await supabase.from('profiles').insert({ 
         id: data.user.id, 
-        display_name: displayName,
-        username: username || null,
-        email: email
+        username: username
       });
       await loadProfile(data.user.id);
     }
   }
 
-  async function signIn(identifier: string, password: string) {
-    let email = identifier;
-    
-    if (!identifier.includes('@')) {
-      const { data } = await supabase
-        .from('profiles')
-        .select('email')
-        .eq('username', identifier)
-        .single();
-      
-      if (data?.email) {
-        email = data.email;
-      } else {
-        throw new Error('Nom d\'utilisateur introuvable');
-      }
-    }
-    
+  async function signIn(username: string, password: string) {
+    const email = `${username}@app.local`;
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) throw error;
   }
@@ -89,9 +71,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     await supabase.auth.signOut({ scope: 'local' });
   }
 
-  async function updateDisplayName(name: string) {
+  async function updateUsername(name: string) {
     if (!user) return;
-    await supabase.from('profiles').update({ display_name: name }).eq('id', user.id);
+    await supabase.from('profiles').update({ username: name }).eq('id', user.id);
     await refreshProfile();
   }
 
@@ -102,7 +84,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   if (loading) return <div>Loading...</div>;
 
   return (
-    <AuthContext.Provider value={{ user, profile, signUp, signIn, signOut, updateDisplayName, refreshProfile }}>
+    <AuthContext.Provider value={{ user, profile, signUp, signIn, signOut, updateUsername, refreshProfile }}>
       {children}
     </AuthContext.Provider>
   );

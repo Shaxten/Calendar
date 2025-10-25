@@ -2,12 +2,12 @@ import { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 
 function Profile() {
-  const { profile, updateDisplayName } = useAuth();
+  const { profile, updateUsername } = useAuth();
   const [editing, setEditing] = useState(false);
-  const [newName, setNewName] = useState(profile?.display_name || '');
+  const [newName, setNewName] = useState(profile?.username || '');
 
   async function handleUpdate() {
-    await updateDisplayName(newName);
+    await updateUsername(newName);
     setEditing(false);
   }
 
@@ -15,7 +15,7 @@ function Profile() {
     <div className="container">
       <h1>Profil</h1>
       <div style={{ marginTop: '2rem' }}>
-        <p><strong>Nom d'affichage:</strong></p>
+        <p><strong>Nom d'utilisateur:</strong></p>
         {editing ? (
           <div style={{ marginTop: '1rem' }}>
             <input
@@ -31,7 +31,7 @@ function Profile() {
           </div>
         ) : (
           <div style={{ marginTop: '1rem' }}>
-            <span style={{ fontSize: '1.2rem' }}>{profile?.display_name}</span>
+            <span style={{ fontSize: '1.2rem' }}>{profile?.username}</span>
             <button onClick={() => setEditing(true)} style={{ marginLeft: '1rem' }}>
               Modifier
             </button>

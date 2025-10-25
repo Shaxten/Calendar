@@ -18,7 +18,7 @@ function Admin() {
   const [newFood, setNewFood] = useState({ name: '', restaurant: '' });
 
   useEffect(() => {
-    if (!user || profile?.display_name !== 'Joey') {
+    if (!user || profile?.username !== 'Joey') {
       navigate('/');
       return;
     }
@@ -65,7 +65,7 @@ function Admin() {
     loadCategories();
   }
 
-  if (profile?.display_name !== 'Joey') {
+  if (profile?.username !== 'Joey') {
     return null;
   }
 
