@@ -52,9 +52,7 @@ function Admin() {
       user_id: user?.id,
       category_id: selectedCategory,
       food_name: newFood.name,
-      restaurant_name: newFood.restaurant,
-      taste_rating: null,
-      look_rating: null
+      restaurant_name: newFood.restaurant
     });
     setNewFood({ name: '', restaurant: '' });
     alert('Aliment ajouté avec succès!');
