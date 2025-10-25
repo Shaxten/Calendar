@@ -5,13 +5,15 @@ import type { User } from '@supabase/supabase-js';
 interface Profile {
   id: string;
   display_name: string;
+  username?: string;
+  email?: string;
 }
 
 interface AuthContextType {
   user: User | null;
   profile: Profile | null;
-  signUp: (email: string, password: string, displayName: string) => Promise<void>;
-  signIn: (email: string, password: string) => Promise<void>;
+  signUp: (email: string, password: string, displayName: string, username?: string) => Promise<void>;
+  signIn: (identifier: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
   updateDisplayName: (name: string) => Promise<void>;
   refreshProfile: () => Promise<void>;
@@ -48,16 +50,37 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (data) setProfile(data);
   }
 
-  async function signUp(email: string, password: string, displayName: string) {
+  async function signUp(email: string, password: string, displayName: string, username?: string) {
     const { data, error } = await supabase.auth.signUp({ email, password });
     if (error) throw error;
     if (data.user) {
-      await supabase.from('profiles').insert({ id: data.user.id, display_name: displayName });
+      await supabase.from('profiles').insert({ 
+        id: data.user.id, 
+        display_name: displayName,
+        username: username || null,
+        email: email
+      });
       await loadProfile(data.user.id);
     }
   }
 
-  async function signIn(email: string, password: string) {
+  async function signIn(identifier: string, password: string) {
+    let email = identifier;
+    
+    if (!identifier.includes('@')) {
+      const { data } = await supabase
+        .from('profiles')
+        .select('email')
+        .eq('username', identifier)
+        .single();
+      
+      if (data?.email) {
+        email = data.email;
+      } else {
+        throw new Error('Nom d\'utilisateur introuvable');
+      }
+    }
+    
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) throw error;
   }

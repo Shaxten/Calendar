@@ -4,6 +4,8 @@
 CREATE TABLE IF NOT EXISTS profiles (
   id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
   display_name TEXT NOT NULL,
+  username TEXT UNIQUE,
+  email TEXT NOT NULL,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
@@ -95,6 +97,10 @@ ALTER TABLE user_votes ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Users can view own profile" 
 ON profiles FOR SELECT 
 USING (auth.uid() = id);
+
+CREATE POLICY "Allow username lookup for login" 
+ON profiles FOR SELECT 
+USING (true);
 
 CREATE POLICY "Users can insert own profile" 
 ON profiles FOR INSERT 
