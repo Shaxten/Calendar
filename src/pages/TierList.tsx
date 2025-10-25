@@ -115,24 +115,24 @@ function TierList() {
 
   return (
     <div style={{ padding: '20px', maxWidth: '1200px', margin: '0 auto' }}>
-      <h1>Food Tier List</h1>
+      <h1>Classement de Nourriture</h1>
 
       <div style={{ background: '#fff', border: '1px solid #ddd', padding: '15px', borderRadius: '8px', marginBottom: '20px' }}>
-        <h3 style={{ marginTop: 0, color: '#000' }}>Filter by Restaurant</h3>
+        <h3 style={{ marginTop: 0, color: '#000' }}>Filtrer par Restaurant</h3>
         <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
           <select
             value={filterRestaurant}
             onChange={(e) => setFilterRestaurant(e.target.value)}
             style={{ flex: 1, padding: '10px', fontSize: '16px' }}
           >
-            <option value="">All Restaurants</option>
+            <option value="">Tous les Restaurants</option>
             {restaurants.map(restaurant => (
               <option key={restaurant} value={restaurant}>{restaurant}</option>
             ))}
           </select>
           {filterRestaurant && (
             <button onClick={() => setFilterRestaurant('')} style={{ padding: '10px 20px', background: '#6c757d', color: '#fff', border: 'none', borderRadius: '4px' }}>
-              Clear
+              Effacer
             </button>
           )}
         </div>
@@ -140,7 +140,7 @@ function TierList() {
 
       {!filterRestaurant && bestByRestaurant.length > 0 && (
         <div style={{ background: '#fff3cd', border: '2px solid #ffc107', padding: '15px', borderRadius: '8px', marginBottom: '20px' }}>
-          <h3 style={{ marginTop: 0, color: '#000' }}>🏆 Best Rated by Restaurant</h3>
+          <h3 style={{ marginTop: 0, color: '#000' }}>🏆 Meilleur Noté par Restaurant</h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             {bestByRestaurant.map(({ restaurant, item }: any) => {
               const avg = (item.avg_taste + item.avg_look) / 2;
@@ -156,7 +156,7 @@ function TierList() {
                       {restaurant} - {item.category_name}
                     </div>
                     <div style={{ fontSize: '13px', color: '#999' }}>
-                      Taste: {item.avg_taste.toFixed(1)}/10 | Look: {item.avg_look.toFixed(1)}/10 | Avg: {avg.toFixed(1)} ({item.vote_count} votes)
+                      Goût: {item.avg_taste.toFixed(1)}/10 | Apparence: {item.avg_look.toFixed(1)}/10 | Moy: {avg.toFixed(1)} ({item.vote_count} votes)
                     </div>
                   </div>
                 </div>
@@ -166,12 +166,12 @@ function TierList() {
         </div>
       )}
 
-      <h2>Categories</h2>
+      <h2>Catégories</h2>
       {groupedByCategory.map(({ category, items }) => (
         <div key={category.id} style={{ background: '#fff', border: '1px solid #ddd', padding: '15px', borderRadius: '8px', marginBottom: '15px' }}>
           <h3 style={{ margin: 0, marginBottom: '10px', color: '#000' }}>{category.name}</h3>
           {items.length === 0 ? (
-            <p style={{ color: '#999' }}>No items in this category</p>
+            <p style={{ color: '#999' }}>Aucun article dans cette catégorie</p>
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
               {items.map(item => {
@@ -191,13 +191,13 @@ function TierList() {
                       </div>
                       <div style={{ fontSize: '13px', color: '#999' }}>
                         {avg !== null && item.avg_taste !== undefined && item.avg_look !== undefined
-                          ? `Taste: ${item.avg_taste.toFixed(1)}/10 | Look: ${item.avg_look.toFixed(1)}/10 | Avg: ${avg.toFixed(1)} (${item.vote_count} votes)`
-                          : 'Not rated yet'}
+                          ? `Goût: ${item.avg_taste.toFixed(1)}/10 | Apparence: ${item.avg_look.toFixed(1)}/10 | Moy: ${avg.toFixed(1)} (${item.vote_count} votes)`
+                          : 'Pas encore noté'}
                       </div>
                     </div>
                     {profile?.display_name === 'Joey' && (
                       <button onClick={() => deleteFood(item.id)} style={{ background: '#dc3545', color: '#fff', border: 'none', padding: '6px 12px', borderRadius: '4px', cursor: 'pointer' }}>
-                        Delete
+                        Supprimer
                       </button>
                     )}
                   </div>

@@ -89,7 +89,7 @@ function FoodTracker() {
 
   async function addCustomFood() {
     if (!customFood.name || !customFood.calories) {
-      alert('Name and calories are required');
+      alert('Le nom et les calories sont requis');
       return;
     }
 
@@ -153,17 +153,17 @@ function FoodTracker() {
 
   const getDietType = () => {
     if (totalMacroCals === 0) return '';
-    if (fatPercent >= 60 && carbsPercent <= 10) return 'Ketogenic Diet';
-    if (fatPercent >= 50 && carbsPercent <= 20) return 'Low-Carb High-Fat';
-    if (proteinPercent >= 35) return 'High-Protein Diet';
-    if (carbsPercent >= 55) return 'High-Carb Diet';
-    if (proteinPercent >= 25 && proteinPercent <= 35 && carbsPercent >= 40 && carbsPercent <= 50 && fatPercent >= 20 && fatPercent <= 35) return 'Balanced Diet';
-    return 'Mixed Diet';
+    if (fatPercent >= 60 && carbsPercent <= 10) return 'Régime Cétogène';
+    if (fatPercent >= 50 && carbsPercent <= 20) return 'Faible en Glucides';
+    if (proteinPercent >= 35) return 'Riche en Protéines';
+    if (carbsPercent >= 55) return 'Riche en Glucides';
+    if (proteinPercent >= 25 && proteinPercent <= 35 && carbsPercent >= 40 && carbsPercent <= 50 && fatPercent >= 20 && fatPercent <= 35) return 'Régime Équilibré';
+    return 'Régime Mixte';
   };
 
   return (
     <div style={{ padding: '20px', maxWidth: '1000px', margin: '0 auto' }}>
-      <h1>Food Tracker</h1>
+      <h1>Suivi Alimentaire</h1>
       
       <div style={{ display: 'flex', gap: '10px', marginBottom: '20px', alignItems: 'center' }}>
         <input
@@ -176,17 +176,17 @@ function FoodTracker() {
           onClick={() => setViewMode(viewMode === 'single' ? 'all' : 'single')}
           style={{ padding: '8px 16px', background: '#6c757d', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
         >
-          {viewMode === 'single' ? 'View All Days' : 'View Single Day'}
+          {viewMode === 'single' ? 'Voir Tous les Jours' : 'Voir Un Seul Jour'}
         </button>
       </div>
 
       <div style={{ background: '#f0f0f0', padding: '20px', borderRadius: '8px', marginBottom: '20px' }}>
-        <h2 style={{ color: '#000' }}>{viewMode === 'single' ? 'Daily Totals' : `Totals for ${selectedDate}`}</h2>
+        <h2 style={{ color: '#000' }}>{viewMode === 'single' ? 'Totaux Quotidiens' : `Totaux pour ${selectedDate}`}</h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '15px', color: '#000' }}>
           <div><strong>Calories:</strong> {totals.calories}</div>
-          <div><strong>Protein:</strong> {totals.protein}g</div>
-          <div><strong>Carbs:</strong> {totals.carbs}g</div>
-          <div><strong>Fat:</strong> {totals.fat}g</div>
+          <div><strong>Protéines:</strong> {totals.protein}g</div>
+          <div><strong>Glucides:</strong> {totals.carbs}g</div>
+          <div><strong>Lipides:</strong> {totals.fat}g</div>
         </div>
         
         {totalMacroCals > 0 && (
@@ -230,22 +230,22 @@ function FoodTracker() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <div style={{ width: '20px', height: '20px', background: '#4caf50', borderRadius: '3px' }}></div>
-                <span style={{ color: '#000' }}>Protein: {proteinPercent}%</span>
+                <span style={{ color: '#000' }}>Protéines: {proteinPercent}%</span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <div style={{ width: '20px', height: '20px', background: '#ff9800', borderRadius: '3px' }}></div>
-                <span style={{ color: '#000' }}>Carbs: {carbsPercent}%</span>
+                <span style={{ color: '#000' }}>Glucides: {carbsPercent}%</span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <div style={{ width: '20px', height: '20px', background: '#f44336', borderRadius: '3px' }}></div>
-                <span style={{ color: '#000' }}>Fat: {fatPercent}%</span>
+                <span style={{ color: '#000' }}>Lipides: {fatPercent}%</span>
               </div>
             </div>
           </div>
         )}
         {totalMacroCals > 0 && (
           <div style={{ marginTop: '15px', textAlign: 'center', padding: '10px', background: '#fff', borderRadius: '4px' }}>
-            <strong style={{ color: '#000' }}>Diet Type: </strong>
+            <strong style={{ color: '#000' }}>Type de Régime: </strong>
             <span style={{ color: '#2196F3', fontSize: '16px' }}>{getDietType()}</span>
           </div>
         )}
@@ -253,33 +253,33 @@ function FoodTracker() {
 
       {viewMode === 'single' && (
         <div style={{ marginBottom: '20px' }}>
-          <h3>Add Food</h3>
+          <h3>Ajouter Nourriture</h3>
         <div style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
           <select
             value={selectedFood}
             onChange={(e) => setSelectedFood(e.target.value)}
             style={{ flex: 1, padding: '10px', fontSize: '16px' }}
           >
-            <option value="">Select from your food library...</option>
+            <option value="">Sélectionnez dans votre bibliothèque...</option>
             {customFoods.map((food) => (
               <option key={food.id} value={food.id}>
                 {food.food_name} ({food.calories}cal)
               </option>
             ))}
           </select>
-          <button onClick={addFromLibrary} disabled={!selectedFood} style={{ padding: '10px 20px' }}>Add</button>
+          <button onClick={addFromLibrary} disabled={!selectedFood} style={{ padding: '10px 20px' }}>Ajouter</button>
           <button onClick={() => setShowCustomForm(!showCustomForm)} style={{ padding: '10px 20px', background: '#6c757d', color: '#fff', border: 'none', borderRadius: '4px' }}>
-            + New Food
+            + Nouvelle Nourriture
           </button>
         </div>
 
         {showCustomForm && (
           <div style={{ background: '#f9f9f9', padding: '15px', borderRadius: '4px', marginTop: '10px' }}>
-            <h4>Create New Food</h4>
+            <h4>Créer Nouvelle Nourriture</h4>
             <div style={{ display: 'grid', gap: '10px' }}>
               <input
                 type="text"
-                placeholder="Food name"
+                placeholder="Nom de la nourriture"
                 value={customFood.name}
                 onChange={(e) => setCustomFood({ ...customFood, name: e.target.value })}
                 style={{ padding: '8px' }}
@@ -294,28 +294,28 @@ function FoodTracker() {
                 />
                 <input
                   type="number"
-                  placeholder="Protein (g)"
+                  placeholder="Protéines (g)"
                   value={customFood.protein}
                   onChange={(e) => setCustomFood({ ...customFood, protein: e.target.value })}
                   style={{ padding: '8px' }}
                 />
                 <input
                   type="number"
-                  placeholder="Carbs (g)"
+                  placeholder="Glucides (g)"
                   value={customFood.carbs}
                   onChange={(e) => setCustomFood({ ...customFood, carbs: e.target.value })}
                   style={{ padding: '8px' }}
                 />
                 <input
                   type="number"
-                  placeholder="Fat (g)"
+                  placeholder="Lipides (g)"
                   value={customFood.fat}
                   onChange={(e) => setCustomFood({ ...customFood, fat: e.target.value })}
                   style={{ padding: '8px' }}
                 />
               </div>
               <button onClick={addCustomFood} style={{ padding: '10px', background: '#28a745', color: '#fff', border: 'none', borderRadius: '4px' }}>
-                Add Custom Food
+                Ajouter Nourriture
               </button>
             </div>
           </div>
@@ -325,29 +325,29 @@ function FoodTracker() {
 
       {viewMode === 'single' ? (
         <>
-          <h3>Today's Meals</h3>
+          <h3>Repas d'Aujourd'hui</h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {entries.map((entry) => (
               <div key={entry.id} style={{ background: '#fff', border: '1px solid #ddd', padding: '15px', borderRadius: '4px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div>
                   <strong style={{ fontSize: '18px', color:'black' }}>{entry.food_name}</strong>
                   <div style={{ fontSize: '14px', color: '#666', marginTop: '5px' }}>
-                    {entry.calories}cal | Protein: {entry.protein}g | Carbs: {entry.carbs}g | Fat: {entry.fat}g
+                    {entry.calories}cal | Protéines: {entry.protein}g | Glucides: {entry.carbs}g | Lipides: {entry.fat}g
                   </div>
                 </div>
                 <button onClick={() => deleteEntry(entry.id)} style={{ background: '#dc3545', color: '#fff', border: 'none', padding: '8px 16px', borderRadius: '4px', cursor: 'pointer' }}>
-                  Delete
+                  Supprimer
                 </button>
               </div>
             ))}
             {entries.length === 0 && (
-              <p style={{ textAlign: 'center', color: '#999' }}>No food entries for this day</p>
+              <p style={{ textAlign: 'center', color: '#999' }}>Aucune entrée pour ce jour</p>
             )}
           </div>
         </>
       ) : (
         <>
-          <h3>All Days</h3>
+          <h3>Tous les Jours</h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
             {Object.keys(groupedByDate).sort((a, b) => b.localeCompare(a)).map((date) => {
               const dayEntries = groupedByDate[date];
@@ -385,7 +385,7 @@ function FoodTracker() {
               );
             })}
             {Object.keys(groupedByDate).length === 0 && (
-              <p style={{ textAlign: 'center', color: '#999' }}>No food entries yet</p>
+              <p style={{ textAlign: 'center', color: '#999' }}>Aucune entrée encore</p>
             )}
           </div>
         </>

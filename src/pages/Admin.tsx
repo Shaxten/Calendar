@@ -45,7 +45,7 @@ function Admin() {
 
   async function addFood() {
     if (!selectedCategory || !newFood.name || !newFood.restaurant) {
-      alert('Food name and restaurant are required');
+      alert('Le nom de l\'aliment et le restaurant sont requis');
       return;
     }
     await supabase.from('tier_food_items').insert({
@@ -57,7 +57,7 @@ function Admin() {
       look_rating: null
     });
     setNewFood({ name: '', restaurant: '' });
-    alert('Food item added successfully!');
+    alert('Aliment ajouté avec succès!');
   }
 
   async function deleteCategory(id: string) {
@@ -71,34 +71,34 @@ function Admin() {
 
   return (
     <div style={{ padding: '20px', maxWidth: '1000px', margin: '0 auto' }}>
-      <h1>Admin Panel</h1>
-      <p style={{ color: '#666', marginBottom: '30px' }}>Only accessible by Joey</p>
+      <h1>Panneau Admin</h1>
+      <p style={{ color: '#666', marginBottom: '30px' }}>Accessible uniquement par Joey</p>
 
       <div style={{ background: '#f0f0f0', padding: '20px', borderRadius: '8px', marginBottom: '20px' }}>
-        <h3 style={{ color: '#000' }}>Add Category</h3>
+        <h3 style={{ color: '#000' }}>Ajouter Catégorie</h3>
         <div style={{ display: 'flex', gap: '10px' }}>
           <input
             type="text"
             value={newCategory}
             onChange={(e) => setNewCategory(e.target.value)}
-            placeholder="Category name (e.g., Hamburger, Pizza)"
+            placeholder="Nom de catégorie (ex: Hamburger, Pizza)"
             style={{ flex: 1, padding: '10px', fontSize: '16px' }}
           />
           <button onClick={addCategory} style={{ padding: '10px 20px', background: '#007bff', color: '#fff', border: 'none', borderRadius: '4px' }}>
-            Add Category
+            Ajouter Catégorie
           </button>
         </div>
       </div>
 
       <div style={{ background: '#f9f9f9', padding: '20px', borderRadius: '8px', marginBottom: '20px' }}>
-        <h3 style={{ color: '#000' }}>Add Food Item</h3>
+        <h3 style={{ color: '#000' }}>Ajouter Aliment</h3>
         <div style={{ display: 'grid', gap: '10px' }}>
           <select
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
             style={{ padding: '10px', fontSize: '16px' }}
           >
-            <option value="">Select category...</option>
+            <option value="">Sélectionner catégorie...</option>
             {categories.map(cat => (
               <option key={cat.id} value={cat.id}>{cat.name}</option>
             ))}
@@ -107,33 +107,33 @@ function Admin() {
             type="text"
             value={newFood.name}
             onChange={(e) => setNewFood({ ...newFood, name: e.target.value })}
-            placeholder="Food name (e.g., Big Mac, Margherita)"
+            placeholder="Nom de l'aliment (ex: Big Mac, Margherita)"
             style={{ padding: '10px', fontSize: '16px' }}
           />
           <input
             type="text"
             value={newFood.restaurant}
             onChange={(e) => setNewFood({ ...newFood, restaurant: e.target.value })}
-            placeholder="Restaurant name (e.g., McDonald's, Pizza Hut)"
+            placeholder="Nom du restaurant (ex: McDonald's, Pizza Hut)"
             style={{ padding: '10px', fontSize: '16px' }}
           />
           <button onClick={addFood} style={{ padding: '10px', background: '#28a745', color: '#fff', border: 'none', borderRadius: '4px' }}>
-            Add Food
+            Ajouter Aliment
           </button>
         </div>
       </div>
 
       <div style={{ background: '#fff', border: '1px solid #ddd', padding: '15px', borderRadius: '8px' }}>
-        <h3 style={{ color: '#000' }}>Manage Categories</h3>
+        <h3 style={{ color: '#000' }}>Gérer Catégories</h3>
         {categories.length === 0 ? (
-          <p style={{ color: '#999' }}>No categories yet</p>
+          <p style={{ color: '#999' }}>Aucune catégorie encore</p>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             {categories.map(cat => (
               <div key={cat.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px', background: '#f9f9f9', borderRadius: '4px' }}>
                 <strong style={{ color: '#000' }}>{cat.name}</strong>
                 <button onClick={() => deleteCategory(cat.id)} style={{ background: '#dc3545', color: '#fff', border: 'none', padding: '6px 12px', borderRadius: '4px', cursor: 'pointer' }}>
-                  Delete
+                  Supprimer
                 </button>
               </div>
             ))}

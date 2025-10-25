@@ -94,7 +94,7 @@ function Vote() {
         look: nextVote?.look_rating ?? 5 
       });
     } else {
-      alert('All foods rated!');
+      alert('Tous les aliments notés!');
       loadFoodItems();
       setCurrentIndex(0);
     }
@@ -115,10 +115,10 @@ function Vote() {
   if (foodItems.length === 0) {
     return (
       <div style={{ padding: '20px', maxWidth: '600px', margin: '0 auto', textAlign: 'center' }}>
-        <h1>Vote on Foods</h1>
-        <p>No food items to vote on. Add some in the Tier List page!</p>
+        <h1>Voter sur la Nourriture</h1>
+        <p>Aucun aliment à voter. Ajoutez-en dans la page Classement!</p>
         <Link to="/tierlist" style={{ padding: '10px 20px', background: '#007bff', color: '#fff', textDecoration: 'none', borderRadius: '4px', display: 'inline-block', marginTop: '20px' }}>
-          Go to Tier List
+          Aller au Classement
         </Link>
       </div>
     );
@@ -131,14 +131,14 @@ function Vote() {
   return (
     <div style={{ padding: '20px', maxWidth: '600px', margin: '0 auto' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-        <h1>Vote on Foods</h1>
+        <h1>Voter sur la Nourriture</h1>
         <Link to="/tierlist" style={{ padding: '8px 16px', background: '#6c757d', color: '#fff', textDecoration: 'none', borderRadius: '4px' }}>
-          Back to List
+          Retour au Classement
         </Link>
       </div>
 
       <div style={{ background: '#6c757d', color: '#fff', padding: '10px', borderRadius: '4px', marginBottom: '20px', textAlign: 'center' }}>
-        <strong>Progress:</strong> {currentIndex + 1} / {foodItems.length}
+        <strong>Progrès:</strong> {currentIndex + 1} / {foodItems.length}
       </div>
 
       <div style={{ background: '#fff', border: '2px solid #007bff', padding: '30px', borderRadius: '8px', textAlign: 'center' }}>
@@ -149,13 +149,13 @@ function Vote() {
         <p style={{ color: '#666', marginBottom: '10px', fontSize: '16px' }}>{current.restaurant_name}</p>
         {hasVoted && (
           <p style={{ color: '#28a745', marginBottom: '20px', fontSize: '14px', fontWeight: 'bold' }}>
-            ✓ You've already voted on this item
+            ✓ Vous avez déjà voté pour cet article
           </p>
         )}
 
         <div style={{ marginBottom: '30px' }}>
           <label style={{ display: 'block', marginBottom: '10px', fontSize: '18px', fontWeight: 'bold', color: '#000' }}>
-            Taste Rating: {ratings.taste}/10
+            Note de Goût: {ratings.taste}/10
           </label>
           <input
             type="range"
@@ -174,7 +174,7 @@ function Vote() {
 
         <div style={{ marginBottom: '30px' }}>
           <label style={{ display: 'block', marginBottom: '10px', fontSize: '18px', fontWeight: 'bold', color: '#000' }}>
-            Look Rating: {ratings.look}/10
+            Note d'Apparence: {ratings.look}/10
           </label>
           <input
             type="range"
@@ -193,10 +193,10 @@ function Vote() {
 
         <div style={{ display: 'flex', gap: '10px' }}>
           <button onClick={skip} style={{ flex: 1, padding: '15px', background: '#6c757d', color: '#fff', border: 'none', borderRadius: '4px', fontSize: '16px', cursor: 'pointer' }}>
-            Skip
+            Passer
           </button>
           <button onClick={saveRating} style={{ flex: 2, padding: '15px', background: '#28a745', color: '#fff', border: 'none', borderRadius: '4px', fontSize: '16px', cursor: 'pointer' }}>
-            Save & Next
+            Enregistrer & Suivant
           </button>
         </div>
       </div>
