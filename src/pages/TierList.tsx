@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../supabase';
-import { Link } from 'react-router-dom';
 
 interface Category {
   id: string;
