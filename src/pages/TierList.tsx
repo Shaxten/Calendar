@@ -175,7 +175,7 @@ function TierList() {
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
               {items.map(item => {
-                const avg = item.avg_taste !== null && item.avg_look !== null 
+                const avg = item.avg_taste !== null && item.avg_look !== null && item.avg_taste !== undefined && item.avg_look !== undefined
                   ? (item.avg_taste + item.avg_look) / 2 
                   : null;
                 const { tier, color } = getTier(avg);
@@ -190,8 +190,8 @@ function TierList() {
                         {item.restaurant_name}
                       </div>
                       <div style={{ fontSize: '13px', color: '#999' }}>
-                        {avg !== null 
-                          ? `Taste: ${item.avg_taste!.toFixed(1)}/10 | Look: ${item.avg_look!.toFixed(1)}/10 | Avg: ${avg.toFixed(1)} (${item.vote_count} votes)`
+                        {avg !== null && item.avg_taste !== undefined && item.avg_look !== undefined
+                          ? `Taste: ${item.avg_taste.toFixed(1)}/10 | Look: ${item.avg_look.toFixed(1)}/10 | Avg: ${avg.toFixed(1)} (${item.vote_count} votes)`
                           : 'Not rated yet'}
                       </div>
                     </div>
