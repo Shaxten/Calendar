@@ -14,7 +14,7 @@ interface FoodItem {
 interface UserVote {
   food_item_id: string;
   taste_rating: number;
-  look_rating: number;
+  price_rating: number;
 }
 
 function Vote() {
@@ -22,7 +22,7 @@ function Vote() {
   const [foodItems, setFoodItems] = useState<FoodItem[]>([]);
   const [userVotes, setUserVotes] = useState<UserVote[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [ratings, setRatings] = useState({ taste: 5, look: 5 });
+  const [ratings, setRatings] = useState({ taste: 5, price: 5 });
 
   useEffect(() => {
     if (user) loadFoodItems();
@@ -53,7 +53,7 @@ function Vote() {
         const currentVote = votes?.find(v => v.food_item_id === foodList[0].id);
         setRatings({ 
           taste: currentVote?.taste_rating ?? 5, 
-          look: currentVote?.look_rating ?? 5 
+          price: currentVote?.price_rating ?? 5 
         });
       }
     }
@@ -70,7 +70,7 @@ function Vote() {
         .from('user_votes')
         .update({
           taste_rating: ratings.taste,
-          look_rating: ratings.look
+          price_rating: ratings.price
         })
         .eq('user_id', user?.id)
         .eq('food_item_id', current.id);
@@ -81,7 +81,7 @@ function Vote() {
           user_id: user?.id,
           food_item_id: current.id,
           taste_rating: ratings.taste,
-          look_rating: ratings.look
+          price_rating: ratings.price
         });
     }
 
@@ -91,7 +91,7 @@ function Vote() {
       const nextVote = userVotes.find(v => v.food_item_id === foodItems[nextIndex].id);
       setRatings({ 
         taste: nextVote?.taste_rating ?? 5, 
-        look: nextVote?.look_rating ?? 5 
+        price: nextVote?.price_rating ?? 5 
       });
     } else {
       alert('Tous les aliments notés!');
@@ -107,7 +107,7 @@ function Vote() {
       const nextVote = userVotes.find(v => v.food_item_id === foodItems[nextIndex].id);
       setRatings({ 
         taste: nextVote?.taste_rating ?? 5, 
-        look: nextVote?.look_rating ?? 5 
+        price: nextVote?.price_rating ?? 5 
       });
     }
   }
@@ -174,18 +174,18 @@ function Vote() {
 
         <div style={{ marginBottom: '30px' }}>
           <label style={{ display: 'block', marginBottom: '10px', fontSize: '18px', fontWeight: 'bold', color: '#000' }}>
-            Note d'Apparence: {ratings.look}/10
+            Note de Prix: {ratings.price}/10
           </label>
           <input
             type="range"
-            min="0"
+            min="1"
             max="10"
-            value={ratings.look}
-            onChange={(e) => setRatings({ ...ratings, look: parseInt(e.target.value) })}
+            value={ratings.price}
+            onChange={(e) => setRatings({ ...ratings, price: parseInt(e.target.value) })}
             style={{ width: '100%', height: '30px' }}
           />
-          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', color: '# 666', marginTop: '5px' }}>
-            <span>0</span>
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', color: '#666', marginTop: '5px' }}>
+            <span>1</span>
             <span>5</span>
             <span>10</span>
           </div>

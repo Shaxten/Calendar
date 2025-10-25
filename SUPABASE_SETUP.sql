@@ -76,7 +76,7 @@ CREATE TABLE IF NOT EXISTS user_votes (
   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
   food_item_id UUID NOT NULL REFERENCES tier_food_items(id) ON DELETE CASCADE,
   taste_rating INTEGER NOT NULL CHECK (taste_rating >= 0 AND taste_rating <= 10),
-  look_rating INTEGER NOT NULL CHECK (look_rating >= 0 AND look_rating <= 10),
+  price_rating INTEGER NOT NULL CHECK (price_rating >= 1 AND price_rating <= 10),
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   UNIQUE(user_id, food_item_id)
 );

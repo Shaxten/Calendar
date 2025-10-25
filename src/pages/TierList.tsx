@@ -15,7 +15,7 @@ interface FoodItem {
   restaurant_name: string;
   category_name?: string;
   avg_taste?: number;
-  avg_look?: number;
+  avg_price?: number;
   vote_count?: number;
 }
 
@@ -55,15 +55,15 @@ function TierList() {
         const avg_taste = itemVotes.length > 0 
           ? itemVotes.reduce((sum, v) => sum + v.taste_rating, 0) / itemVotes.length 
           : null;
-        const avg_look = itemVotes.length > 0 
-          ? itemVotes.reduce((sum, v) => sum + v.look_rating, 0) / itemVotes.length 
+        const avg_price = itemVotes.length > 0 
+          ? itemVotes.reduce((sum, v) => sum + v.price_rating, 0) / itemVotes.length 
           : null;
         
         return {
           ...item,
           category_name: (item.tier_categories as any)?.name,
           avg_taste,
-          avg_look,
+          avg_price,
           vote_count: itemVotes.length
         };
       });
@@ -100,13 +100,13 @@ function TierList() {
     const restaurantItems = foodItems.filter(item => 
       item.restaurant_name === restaurant && 
       item.avg_taste !== null && 
-      item.avg_look !== null
+      item.avg_price !== null
     );
     if (restaurantItems.length === 0) return null;
     
     const best = restaurantItems.reduce((prev, current) => {
-      const prevAvg = (prev.avg_taste! + prev.avg_look!) / 2;
-      const currentAvg = (current.avg_taste! + current.avg_look!) / 2;
+      const prevAvg = (prev.avg_taste! + prev.avg_price!) / 2;
+      const currentAvg = (current.avg_taste! + current.avg_price!) / 2;
       return currentAvg > prevAvg ? current : prev;
     });
     
@@ -143,7 +143,7 @@ function TierList() {
           <h3 style={{ marginTop: 0, color: '#000' }}>🏆 Meilleur Noté par Restaurant</h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             {bestByRestaurant.map(({ restaurant, item }: any) => {
-              const avg = (item.avg_taste + item.avg_look) / 2;
+              const avg = (item.avg_taste + item.avg_price) / 2;
               const { tier, color } = getTier(avg);
               return (
                 <div key={restaurant} style={{ display: 'flex', alignItems: 'center', gap: '15px', padding: '10px', background: '#fff', borderRadius: '4px', border: '1px solid #ddd' }}>
@@ -156,7 +156,7 @@ function TierList() {
                       {restaurant} - {item.category_name}
                     </div>
                     <div style={{ fontSize: '13px', color: '#999' }}>
-                      Goût: {item.avg_taste.toFixed(1)}/10 | Apparence: {item.avg_look.toFixed(1)}/10 | Moy: {avg.toFixed(1)} ({item.vote_count} votes)
+                      Goût: {item.avg_taste.toFixed(1)}/10 | Prix: {item.avg_price.toFixed(1)}/10 | Moy: {avg.toFixed(1)} ({item.vote_count} votes)
                     </div>
                   </div>
                 </div>
@@ -175,8 +175,8 @@ function TierList() {
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
               {items.map(item => {
-                const avg = item.avg_taste !== null && item.avg_look !== null && item.avg_taste !== undefined && item.avg_look !== undefined
-                  ? (item.avg_taste + item.avg_look) / 2 
+                const avg = item.avg_taste !== null && item.avg_price !== null && item.avg_taste !== undefined && item.avg_price !== undefined
+                  ? (item.avg_taste + item.avg_price) / 2 
                   : null;
                 const { tier, color } = getTier(avg);
                 return (
@@ -190,12 +190,12 @@ function TierList() {
                         {item.restaurant_name}
                       </div>
                       <div style={{ fontSize: '13px', color: '#999' }}>
-                        {avg !== null && item.avg_taste !== undefined && item.avg_look !== undefined
-                          ? `Goût: ${item.avg_taste.toFixed(1)}/10 | Apparence: ${item.avg_look.toFixed(1)}/10 | Moy: ${avg.toFixed(1)} (${item.vote_count} votes)`
+                        {avg !== null && item.avg_taste !== undefined && item.avg_price !== undefined
+                          ? `Goût: ${item.avg_taste.toFixed(1)}/10 | Prix: ${item.avg_price.toFixed(1)}/10 | Moy: ${avg.toFixed(1)} (${item.vote_count} votes)`
                           : 'Pas encore noté'}
                       </div>
                     </div>
-                    {profile?.display_name === 'Joey' && (
+                    {profile?.username === 'Joey' && (
                       <button onClick={() => deleteFood(item.id)} style={{ background: '#dc3545', color: '#fff', border: 'none', padding: '6px 12px', borderRadius: '4px', cursor: 'pointer' }}>
                         Supprimer
                       </button>
