@@ -50,13 +50,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   async function signUp(username: string, password: string) {
     const email = `${username}@app.local`;
-    const { data, error } = await supabase.auth.signUp({ email, password });
+    const { data, error } = await supabase.auth.signUp({ 
+      email, 
+      password,
+      options: {
+        emailRedirectTo: undefined,
+        data: { username }
+      }
+    });
     if (error) throw error;
     if (data.user) {
-      await supabase.from('profiles').insert({ 
+      const { error: profileError } = await supabase.from('profiles').insert({ 
         id: data.user.id, 
         username: username
       });
+      if (profileError) console.error('Profile creation error:', profileError);
       await loadProfile(data.user.id);
     }
   }
