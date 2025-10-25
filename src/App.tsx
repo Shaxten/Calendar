@@ -7,6 +7,9 @@ import Calendar from './pages/Calendar';
 import Profile from './pages/Profile';
 import Notes from './pages/Notes';
 import FoodTracker from './pages/FoodTracker';
+import TierList from './pages/TierList';
+import Vote from './pages/Vote';
+import Admin from './pages/Admin';
 
 function Navigation() {
   const { user, profile, signOut } = useAuth();
@@ -53,6 +56,9 @@ function Navigation() {
           {user && <li><Link to="/calendar" onClick={() => setMenuOpen(false)} style={{ color: '#fff', textDecoration: 'none' }}>Calendar</Link></li>}
           {user && <li><Link to="/notes" onClick={() => setMenuOpen(false)} style={{ color: '#fff', textDecoration: 'none' }}>Notes</Link></li>}
           {user && <li><Link to="/food" onClick={() => setMenuOpen(false)} style={{ color: '#fff', textDecoration: 'none' }}>Food</Link></li>}
+          {user && <li><Link to="/tierlist" onClick={() => setMenuOpen(false)} style={{ color: '#fff', textDecoration: 'none' }}>Tier List</Link></li>}
+          {user && <li><Link to="/vote" onClick={() => setMenuOpen(false)} style={{ color: '#fff', textDecoration: 'none' }}>Vote</Link></li>}
+          {user && profile?.display_name === 'Joey' && <li><Link to="/admin" onClick={() => setMenuOpen(false)} style={{ color: '#fff', textDecoration: 'none' }}>Admin</Link></li>}
           {user && <li><Link to="/profile" onClick={() => setMenuOpen(false)} style={{ color: '#fff', textDecoration: 'none' }}>{profile?.display_name}</Link></li>}
           {!user && <li><Link to="/auth" onClick={() => setMenuOpen(false)} style={{ color: '#fff', textDecoration: 'none' }}>Sign In</Link></li>}
           {user && <li><button onClick={() => { signOut(); setMenuOpen(false); }} style={{ background: '#495057', color: '#fff', border: 'none', padding: '8px 16px', borderRadius: '4px', cursor: 'pointer' }}>Sign Out</button></li>}
@@ -99,6 +105,9 @@ function App() {
           <Route path="/calendar" element={<Calendar />} />
           <Route path="/notes" element={<Notes />} />
           <Route path="/food" element={<FoodTracker />} />
+          <Route path="/tierlist" element={<TierList />} />
+          <Route path="/vote" element={<Vote />} />
+          <Route path="/admin" element={<Admin />} />
           <Route path="/profile" element={<Profile />} />
         </Routes>
       </Router>

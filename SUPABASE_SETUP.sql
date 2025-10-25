@@ -52,12 +52,34 @@ CREATE TABLE IF NOT EXISTS custom_foods (
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
+-- Create tier_categories table
+CREATE TABLE IF NOT EXISTS tier_categories (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  name TEXT NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Create tier_food_items table
+CREATE TABLE IF NOT EXISTS tier_food_items (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  category_id UUID NOT NULL REFERENCES tier_categories(id) ON DELETE CASCADE,
+  food_name TEXT NOT NULL,
+  restaurant_name TEXT NOT NULL,
+  taste_rating INTEGER CHECK (taste_rating >= 0 AND taste_rating <= 10),
+  look_rating INTEGER CHECK (look_rating >= 0 AND look_rating <= 10),
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
 -- Enable RLS
 ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE calendar_notes ENABLE ROW LEVEL SECURITY;
 ALTER TABLE notes ENABLE ROW LEVEL SECURITY;
 ALTER TABLE food_entries ENABLE ROW LEVEL SECURITY;
 ALTER TABLE custom_foods ENABLE ROW LEVEL SECURITY;
+ALTER TABLE tier_categories ENABLE ROW LEVEL SECURITY;
+ALTER TABLE tier_food_items ENABLE ROW LEVEL SECURITY;
 
 -- RLS Policies for profiles
 CREATE POLICY "Users can view own profile" 
@@ -140,6 +162,40 @@ CREATE POLICY "Users can delete own custom foods"
 ON custom_foods FOR DELETE 
 USING (auth.uid() = user_id);
 
+-- RLS Policies for tier_categories
+CREATE POLICY "Users can view own tier categories" 
+ON tier_categories FOR SELECT 
+USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can insert own tier categories" 
+ON tier_categories FOR INSERT 
+WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "Users can update own tier categories" 
+ON tier_categories FOR UPDATE 
+USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can delete own tier categories" 
+ON tier_categories FOR DELETE 
+USING (auth.uid() = user_id);
+
+-- RLS Policies for tier_food_items
+CREATE POLICY "Users can view own tier food items" 
+ON tier_food_items FOR SELECT 
+USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can insert own tier food items" 
+ON tier_food_items FOR INSERT 
+WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "Users can update own tier food items" 
+ON tier_food_items FOR UPDATE 
+USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can delete own tier food items" 
+ON tier_food_items FOR DELETE 
+USING (auth.uid() = user_id);
+
 -- Create indexes
 CREATE INDEX IF NOT EXISTS calendar_notes_user_id_idx ON calendar_notes(user_id);
 CREATE INDEX IF NOT EXISTS calendar_notes_date_idx ON calendar_notes(date);
@@ -147,3 +203,6 @@ CREATE INDEX IF NOT EXISTS notes_user_id_idx ON notes(user_id);
 CREATE INDEX IF NOT EXISTS food_entries_user_id_idx ON food_entries(user_id);
 CREATE INDEX IF NOT EXISTS food_entries_date_idx ON food_entries(date);
 CREATE INDEX IF NOT EXISTS custom_foods_user_id_idx ON custom_foods(user_id);
+CREATE INDEX IF NOT EXISTS tier_categories_user_id_idx ON tier_categories(user_id);
+CREATE INDEX IF NOT EXISTS tier_food_items_user_id_idx ON tier_food_items(user_id);
+CREATE INDEX IF NOT EXISTS tier_food_items_category_id_idx ON tier_food_items(category_id);
