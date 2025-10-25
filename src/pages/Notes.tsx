@@ -139,7 +139,7 @@ function Notes() {
             boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
           }}
         >
-          + New Note
+          + Nouvelle Note
         </button>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
@@ -174,7 +174,7 @@ function Notes() {
               <textarea
                 value={note.content}
                 onChange={(e) => updateNote(note.id, { content: e.target.value })}
-                placeholder="Write your note..."
+                placeholder="Écrivez votre note..."
                 style={{
                   width: '100%',
                   minHeight: '120px',
@@ -200,7 +200,7 @@ function Notes() {
                   fontSize: '14px',
                 }}
               >
-                {savedNotes[note.id] ? '✓ Saved' : 'Save'}
+                {savedNotes[note.id] ? '✓ Enregistré' : 'Enregistrer'}
               </button>
             </div>
           ))}

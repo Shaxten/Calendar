@@ -1,15 +1,15 @@
 function Home() {
   return (
     <div className="container">
-      <h1>Calendar App</h1>
-      <p>Welcome to the Calendar App! This application allows you to:</p>
+      <h1>Application Calendrier</h1>
+      <p>Bienvenue dans l'Application Calendrier! Cette application vous permet de:</p>
       <ul>
-        <li>Create an account and manage your profile</li>
-        <li>View a calendar with all your notes</li>
-        <li>Add notes to specific dates</li>
-        <li>Edit your display name</li>
+        <li>Créer un compte et gérer votre profil</li>
+        <li>Voir un calendrier avec toutes vos notes</li>
+        <li>Ajouter des notes à des dates spécifiques</li>
+        <li>Modifier votre nom d'affichage</li>
       </ul>
-      <p>Sign in or create an account to get started!</p>
+      <p>Connectez-vous ou créez un compte pour commencer!</p>
     </div>
   );
 }

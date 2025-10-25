@@ -26,13 +26,13 @@ function Auth() {
 
   return (
     <div className="container">
-      <h1>{isSignUp ? 'Sign Up' : 'Sign In'}</h1>
+      <h1>{isSignUp ? 'Inscription' : 'Connexion'}</h1>
       <form onSubmit={handleSubmit} style={{ maxWidth: '400px', marginTop: '2rem' }}>
         {isSignUp && (
           <div style={{ marginBottom: '1rem' }}>
             <input
               type="text"
-              placeholder="Display Name"
+              placeholder="Nom d'affichage"
               value={displayName}
               onChange={(e) => setDisplayName(e.target.value)}
               required
@@ -43,7 +43,7 @@ function Auth() {
         <div style={{ marginBottom: '1rem' }}>
           <input
             type="email"
-            placeholder="Email"
+            placeholder="Courriel"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
@@ -53,7 +53,7 @@ function Auth() {
         <div style={{ marginBottom: '1rem' }}>
           <input
             type="password"
-            placeholder="Password"
+            placeholder="Mot de passe"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
@@ -61,12 +61,12 @@ function Auth() {
           />
         </div>
         <button type="submit" style={{ width: '100%', padding: '0.75rem' }}>
-          {isSignUp ? 'Sign Up' : 'Sign In'}
+          {isSignUp ? 'S\'inscrire' : 'Se connecter'}
         </button>
         <p style={{ marginTop: '1rem', textAlign: 'center' }}>
-          {isSignUp ? 'Already have an account?' : "Don't have an account?"}{' '}
+          {isSignUp ? 'Vous avez déjà un compte?' : "Vous n'avez pas de compte?"}{' '}
           <button type="button" onClick={() => setIsSignUp(!isSignUp)} style={{ background: 'none', border: 'none', color: '#4a9eff', cursor: 'pointer', textDecoration: 'underline' }}>
-            {isSignUp ? 'Sign In' : 'Sign Up'}
+            {isSignUp ? 'Se connecter' : 'S\'inscrire'}
           </button>
         </p>
       </form>

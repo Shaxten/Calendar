@@ -28,7 +28,7 @@ function Navigation() {
         maxWidth: '1200px',
         margin: '0 auto',
       }}>
-        <Link to="/#/" style={{ fontSize: '1.5rem', fontWeight: 'bold', textDecoration: 'none', color: '#fff' }}>📅 Calendar App</Link>
+        <Link to="/#/" style={{ fontSize: '1.5rem', fontWeight: 'bold', textDecoration: 'none', color: '#fff' }}>📅 Application Calendrier</Link>
         
         <button
           onClick={() => setMenuOpen(!menuOpen)}
@@ -52,16 +52,16 @@ function Navigation() {
           margin: 0,
           padding: 0,
         }} className={menuOpen ? 'nav-links open' : 'nav-links'}>
-          <li><Link to="/" onClick={() => setMenuOpen(false)} style={{ color: '#fff', textDecoration: 'none' }}>Home</Link></li>
-          {user && <li><Link to="/calendar" onClick={() => setMenuOpen(false)} style={{ color: '#fff', textDecoration: 'none' }}>Calendar</Link></li>}
+          <li><Link to="/" onClick={() => setMenuOpen(false)} style={{ color: '#fff', textDecoration: 'none' }}>Accueil</Link></li>
+          {user && <li><Link to="/calendar" onClick={() => setMenuOpen(false)} style={{ color: '#fff', textDecoration: 'none' }}>Calendrier</Link></li>}
           {user && <li><Link to="/notes" onClick={() => setMenuOpen(false)} style={{ color: '#fff', textDecoration: 'none' }}>Notes</Link></li>}
-          {user && <li><Link to="/food" onClick={() => setMenuOpen(false)} style={{ color: '#fff', textDecoration: 'none' }}>Food</Link></li>}
-          {user && <li><Link to="/tierlist" onClick={() => setMenuOpen(false)} style={{ color: '#fff', textDecoration: 'none' }}>Tier List</Link></li>}
-          {user && <li><Link to="/vote" onClick={() => setMenuOpen(false)} style={{ color: '#fff', textDecoration: 'none' }}>Vote</Link></li>}
+          {user && <li><Link to="/food" onClick={() => setMenuOpen(false)} style={{ color: '#fff', textDecoration: 'none' }}>Nourriture</Link></li>}
+          {user && <li><Link to="/tierlist" onClick={() => setMenuOpen(false)} style={{ color: '#fff', textDecoration: 'none' }}>Classement</Link></li>}
+          {user && <li><Link to="/vote" onClick={() => setMenuOpen(false)} style={{ color: '#fff', textDecoration: 'none' }}>Voter</Link></li>}
           {user && profile?.display_name === 'Joey' && <li><Link to="/admin" onClick={() => setMenuOpen(false)} style={{ color: '#fff', textDecoration: 'none' }}>Admin</Link></li>}
           {user && <li><Link to="/profile" onClick={() => setMenuOpen(false)} style={{ color: '#fff', textDecoration: 'none' }}>{profile?.display_name}</Link></li>}
-          {!user && <li><Link to="/auth" onClick={() => setMenuOpen(false)} style={{ color: '#fff', textDecoration: 'none' }}>Sign In</Link></li>}
-          {user && <li><button onClick={() => { signOut(); setMenuOpen(false); }} style={{ background: '#495057', color: '#fff', border: 'none', padding: '8px 16px', borderRadius: '4px', cursor: 'pointer' }}>Sign Out</button></li>}
+          {!user && <li><Link to="/auth" onClick={() => setMenuOpen(false)} style={{ color: '#fff', textDecoration: 'none' }}>Connexion</Link></li>}
+          {user && <li><button onClick={() => { signOut(); setMenuOpen(false); }} style={{ background: '#495057', color: '#fff', border: 'none', padding: '8px 16px', borderRadius: '4px', cursor: 'pointer' }}>Déconnexion</button></li>}
         </ul>
       </div>
       <style>{`

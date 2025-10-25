@@ -13,9 +13,9 @@ function Profile() {
 
   return (
     <div className="container">
-      <h1>Profile</h1>
+      <h1>Profil</h1>
       <div style={{ marginTop: '2rem' }}>
-        <p><strong>Display Name:</strong></p>
+        <p><strong>Nom d'affichage:</strong></p>
         {editing ? (
           <div style={{ marginTop: '1rem' }}>
             <input
@@ -24,16 +24,16 @@ function Profile() {
               onChange={(e) => setNewName(e.target.value)}
               style={{ padding: '0.5rem', marginRight: '1rem' }}
             />
-            <button onClick={handleUpdate}>Save</button>
+            <button onClick={handleUpdate}>Enregistrer</button>
             <button onClick={() => setEditing(false)} style={{ marginLeft: '0.5rem', background: '#666' }}>
-              Cancel
+              Annuler
             </button>
           </div>
         ) : (
           <div style={{ marginTop: '1rem' }}>
             <span style={{ fontSize: '1.2rem' }}>{profile?.display_name}</span>
             <button onClick={() => setEditing(true)} style={{ marginLeft: '1rem' }}>
-              Edit
+              Modifier
             </button>
           </div>
         )}
