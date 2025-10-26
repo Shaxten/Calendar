@@ -94,8 +94,8 @@ function TierList() {
   const groupedByCategory = categories.map(cat => {
     const items = filteredItems.filter(item => item.category_id === cat.id);
     items.sort((a, b) => {
-      const avgA = a.avg_taste !== null && a.avg_price !== null ? (a.avg_taste + a.avg_price) / 2 : -1;
-      const avgB = b.avg_taste !== null && b.avg_price !== null ? (b.avg_taste + b.avg_price) / 2 : -1;
+      const avgA = a.avg_taste !== null && a.avg_price !== null && a.avg_taste !== undefined && a.avg_price !== undefined ? (a.avg_taste + a.avg_price) / 2 : -1;
+      const avgB = b.avg_taste !== null && b.avg_price !== null && b.avg_taste !== undefined && b.avg_price !== undefined ? (b.avg_taste + b.avg_price) / 2 : -1;
       return avgB - avgA;
     });
     return { category: cat, items };
@@ -116,7 +116,11 @@ function TierList() {
     });
     
     return { restaurant, item: best };
-  }).filter(Boolean);
+  }).filter(Boolean).sort((a: any, b: any) => {
+    const avgA = (a.item.avg_taste + a.item.avg_price) / 2;
+    const avgB = (b.item.avg_taste + b.item.avg_price) / 2;
+    return avgB - avgA;
+  });
 
   return (
     <div style={{ padding: '20px', maxWidth: '1200px', margin: '0 auto' }}>
