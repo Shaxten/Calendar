@@ -91,10 +91,15 @@ function TierList() {
     ? foodItems.filter(item => item.restaurant_name === filterRestaurant)
     : foodItems;
 
-  const groupedByCategory = categories.map(cat => ({
-    category: cat,
-    items: filteredItems.filter(item => item.category_id === cat.id)
-  }));
+  const groupedByCategory = categories.map(cat => {
+    const items = filteredItems.filter(item => item.category_id === cat.id);
+    items.sort((a, b) => {
+      const avgA = a.avg_taste !== null && a.avg_price !== null ? (a.avg_taste + a.avg_price) / 2 : -1;
+      const avgB = b.avg_taste !== null && b.avg_price !== null ? (b.avg_taste + b.avg_price) / 2 : -1;
+      return avgB - avgA;
+    });
+    return { category: cat, items };
+  });
 
   const bestByRestaurant = restaurants.map(restaurant => {
     const restaurantItems = foodItems.filter(item => 
